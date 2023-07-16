@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "miniai"
+  site-url: "https://fromLittleAcorns.github.io/miniai"
+  description: "Version of the fastai miniai repository more targetted at creating a general purpose framework"
+  repo-branch: main
+  repo-url: "https://github.com/fromLittleAcorns/miniai"
