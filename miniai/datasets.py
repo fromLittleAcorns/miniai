@@ -12,7 +12,7 @@ from torch.utils.data import default_collate
 # %% auto 0
 __all__ = ['inplace', 'collate_dict']
 
-# %% ../nbs/01_datasets.ipynb 25
+# %% ../nbs/01_datasets.ipynb 22
 def inplace(f):
     """ This function allows a function that does not return anything directly (ie one that modifies things
     without a return statenent) to then be used in an application that required a return.  So this function
@@ -23,7 +23,7 @@ def inplace(f):
         return b
     return _f
 
-# %% ../nbs/01_datasets.ipynb 29
+# %% ../nbs/01_datasets.ipynb 26
 def collate_dict(ds):
     """ when a dataset is defined by a dictionary this will identify the features and split into inputs and outputs
     as tensor arrays ready for input to a model
