@@ -6,4 +6,7 @@ d = { 'settings': { 'branch': 'main',
                 'git_url': 'https://github.com/fromLittleAcorns/miniai',
                 'lib_path': 'miniai'},
   'syms': { 'miniai.core': { 'miniai.core.foo': ('core.html#foo', 'miniai/core.py'),
-                             'miniai.core.say_hello': ('core.html#say_hello', 'miniai/core.py')}}}
+                             'miniai.core.say_hello': ('core.html#say_hello', 'miniai/core.py')},
+            'miniai.datasets': { 'miniai.datasets.collate_dict': ('datasets.html#collate_dict', 'miniai/datasets.py'),
+                                 'miniai.datasets.inplace': ('datasets.html#inplace', 'miniai/datasets.py')},
+            'miniai.utils': {'miniai.utils.show_image': ('utilities.html#show_image', 'miniai/utils.py')}}}
