@@ -16,6 +16,8 @@ import torchvision.transforms.functional as TF
 from datasets import load_dataset,load_dataset_builder
 from matplotlib.pyplot import axes as ax
 
+from typing import List
+
 # %% auto 0
 __all__ = ['show_image', 'subplots', 'get_grid', 'show_images']
 
