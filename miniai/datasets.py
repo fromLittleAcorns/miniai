@@ -23,7 +23,7 @@ def inplace(f):
         return b
     return _f
 
-# %% ../nbs/01_datasets.ipynb 26
+# %% ../nbs/01_datasets.ipynb 34
 def collate_dict(ds):
     """ when a dataset is defined by a dictionary this will identify the features and split into inputs and outputs
     as tensor arrays ready for input to a model
@@ -31,6 +31,6 @@ def collate_dict(ds):
     get = itemgetter(*ds.features)
     def _f(b):
         """ return a tuple containing the values associated with each of the keys returned by the itemgetter 
-        given that default_collate return a dict with two keys and a stacked tensor for each """
+        given that default_collate returns a dict with two keys and a stacked tensor for each batch"""
         return get(default_collate(b))
     return _f

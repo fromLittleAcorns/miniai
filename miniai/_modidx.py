@@ -9,4 +9,9 @@ d = { 'settings': { 'branch': 'main',
                              'miniai.core.say_hello': ('core.html#say_hello', 'miniai/core.py')},
             'miniai.datasets': { 'miniai.datasets.collate_dict': ('datasets.html#collate_dict', 'miniai/datasets.py'),
                                  'miniai.datasets.inplace': ('datasets.html#inplace', 'miniai/datasets.py')},
-            'miniai.utils': {'miniai.utils.show_image': ('utilities.html#show_image', 'miniai/utils.py')}}}
+            'miniai.plotting': { 'miniai.plotting.get_grid': ('plotting.html#get_grid', 'miniai/plotting.py'),
+                                 'miniai.plotting.show_image': ('plotting.html#show_image', 'miniai/plotting.py'),
+                                 'miniai.plotting.show_images': ('plotting.html#show_images', 'miniai/plotting.py'),
+                                 'miniai.plotting.subplots': ('plotting.html#subplots', 'miniai/plotting.py')},
+            'miniai.utils': { 'miniai.utils.collate_device': ('utils.html#collate_device', 'miniai/utils.py'),
+                              'miniai.utils.to_device': ('utils.html#to_device', 'miniai/utils.py')}}}
