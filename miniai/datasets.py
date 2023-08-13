@@ -5,12 +5,11 @@ from __future__ import annotations
 import math,numpy as np,matplotlib.pyplot as plt
 from operator import itemgetter
 from itertools import zip_longest
+from torch.utils.data import DataLoader, default_collate, Dataset
 import fastcore.all as fc
 
-from torch.utils.data import default_collate
-
 # %% auto 0
-__all__ = ['inplace', 'collate_dict']
+__all__ = ['inplace', 'collate_dict', 'get_dls', 'DataLoaders']
 
 # %% ../nbs/01_datasets.ipynb 22
 def inplace(f):
@@ -34,3 +33,33 @@ def collate_dict(ds):
         given that default_collate returns a dict with two keys and a stacked tensor for each batch"""
         return get(default_collate(b))
     return _f
+
+# %% ../nbs/01_datasets.ipynb 44
+def get_dls(train_ds, # Training Dataset
+            valid_ds, # Validation Dataset
+            bs=64, # Batch size (int)
+            **kwargs):
+    """ Utility function to return train and validation dataloaders from two datasets
+    """
+    train_dl = DataLoader(train_ds, batch_size=bs, shuffle=True, **kwargs)
+    valid_dl = DataLoader(valid_ds, batch_size=bs, shuffle=False, **kwargs)
+    return train_dl, valid_dl
+
+# %% ../nbs/01_datasets.ipynb 45
+class DataLoaders:
+    """ Convenience class to create and contain a collection of datasets
+    """
+    
+    def __init__(self, *dls): self.train,self.valid = dls[:2]
+
+    @classmethod
+    def from_dd(cls, 
+                dd, # dataset with splits identified by dictionary keys, such as Huggingface
+                batch_size: int=64, # Batch size (int)
+                **kwargs):
+        """Create dataloaders based upon dictionary based datasets (such as HuggingFace).  This is 
+        simply a shortcut to avoid creating the dataloaders individually.  Returns a dataloader
+        for each the train and validation splits.  In future could be adapted to cope with more splits
+        """
+        f = collate_dict(dd['train'])
+        return cls(*get_dls(*dd.values(), bs=batch_size, collate_fn=f, **kwargs))
