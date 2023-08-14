@@ -19,4 +19,5 @@ d = { 'settings': { 'branch': 'main',
                                  'miniai.plotting.subplots': ('plotting.html#subplots', 'miniai/plotting.py')},
             'miniai.utils': { 'miniai.utils.collate_device': ('utils.html#collate_device', 'miniai/utils.py'),
                               'miniai.utils.set_seed': ('utils.html#set_seed', 'miniai/utils.py'),
+                              'miniai.utils.to_cpu': ('utils.html#to_cpu', 'miniai/utils.py'),
                               'miniai.utils.to_device': ('utils.html#to_device', 'miniai/utils.py')}}}
