@@ -6,3 +6,4 @@ website:
       - 01_datasets.ipynb
       - 02_plotting.ipynb
       - 03_utils.ipynb
+      - 05_model_blocks.ipynb
