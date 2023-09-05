@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>miniai - Learner</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="miniai - Learner">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://fromLittleAcorns.github.io/miniai/04_learner_files/figure-html/cell-15-output-4.png">
+<meta property="og:site-name" content="miniai">
+<meta property="og:image:height" content="351">
+<meta property="og:image:width" content="525">
+<meta name="twitter:title" content="miniai - Learner">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://fromLittleAcorns.github.io/miniai/04_learner_files/figure-html/cell-15-output-4.png">
+<meta name="twitter:image-height" content="351">
+<meta name="twitter:image-width" content="525">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">miniai</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./learner.html">Learner</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">miniai</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datasets</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./plotting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Plotting</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilities</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./learner.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Learner</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#cancelepochexception" id="toc-cancelepochexception" class="nav-link active" data-scroll-target="#cancelepochexception">CancelEpochException</a></li>
+  <li><a href="#cancelbatchexception" id="toc-cancelbatchexception" class="nav-link" data-scroll-target="#cancelbatchexception">CancelBatchException</a></li>
+  <li><a href="#cancelfitexception" id="toc-cancelfitexception" class="nav-link" data-scroll-target="#cancelfitexception">CancelFitException</a></li>
+  <li><a href="#callback" id="toc-callback" class="nav-link" data-scroll-target="#callback">Callback</a></li>
+  <li><a href="#run_cbs" id="toc-run_cbs" class="nav-link" data-scroll-target="#run_cbs">run_cbs</a></li>
+  <li><a href="#singlebatchcb" id="toc-singlebatchcb" class="nav-link" data-scroll-target="#singlebatchcb">SingleBatchCB</a></li>
+  <li><a href="#metricscb" id="toc-metricscb" class="nav-link" data-scroll-target="#metricscb">MetricsCB</a></li>
+  <li><a href="#devicecb" id="toc-devicecb" class="nav-link" data-scroll-target="#devicecb">DeviceCB</a></li>
+  <li><a href="#traincb" id="toc-traincb" class="nav-link" data-scroll-target="#traincb">TrainCB</a></li>
+  <li><a href="#progresscb" id="toc-progresscb" class="nav-link" data-scroll-target="#progresscb">ProgressCB</a></li>
+  <li><a href="#with_cbs" id="toc-with_cbs" class="nav-link" data-scroll-target="#with_cbs">with_cbs</a></li>
+  <li><a href="#learner" id="toc-learner" class="nav-link" data-scroll-target="#learner">Learner</a></li>
+  <li><a href="#trainlearner" id="toc-trainlearner" class="nav-link" data-scroll-target="#trainlearner">TrainLearner</a></li>
+  <li><a href="#momentumlearner" id="toc-momentumlearner" class="nav-link" data-scroll-target="#momentumlearner">MomentumLearner</a></li>
+  <li><a href="#lrfindercb" id="toc-lrfindercb" class="nav-link" data-scroll-target="#lrfindercb">LRFinderCB</a></li>
+  <li><a href="#show_doc" id="toc-show_doc" class="nav-link" data-scroll-target="#show_doc">show_doc</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fromLittleAcorns/miniai/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Learner</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<hr>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L28" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="cancelepochexception" class="level3">
+<h3 class="anchored" data-anchor-id="cancelepochexception">CancelEpochException</h3>
+<p>Common base class for all non-exit exceptions.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L27" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="cancelbatchexception" class="level3">
+<h3 class="anchored" data-anchor-id="cancelbatchexception">CancelBatchException</h3>
+<p>Common base class for all non-exit exceptions.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L26" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="cancelfitexception" class="level3">
+<h3 class="anchored" data-anchor-id="cancelfitexception">CancelFitException</h3>
+<p>Common base class for all non-exit exceptions.</p>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#callback"><code>Callback</code></a> is the superclass of all callbacks. A lower <code>order</code> results in earlier execution.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L31" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="callback" class="level3">
+<h3 class="anchored" data-anchor-id="callback">Callback</h3>
+<blockquote class="blockquote">
+<pre><code> Callback ()</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#run_cbs"><code>run_cbs</code></a> runs a given method for all callbacks <code>cbs</code>. E.g., if <code>cbs=[cb1, cb2]</code> and <code>method_nm="after_fit"</code> it runs <code>cb1.after_fit</code> and <code>cb2.after_fit</code>.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L34" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="run_cbs" class="level3">
+<h3 class="anchored" data-anchor-id="run_cbs">run_cbs</h3>
+<blockquote class="blockquote">
+<pre><code> run_cbs (cbs, method_nm, learn=None)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L108" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="singlebatchcb" class="level3">
+<h3 class="anchored" data-anchor-id="singlebatchcb">SingleBatchCB</h3>
+<blockquote class="blockquote">
+<pre><code> SingleBatchCB ()</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#metricscb"><code>MetricsCB</code></a> records all metrics and the loss.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L116" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="metricscb" class="level3">
+<h3 class="anchored" data-anchor-id="metricscb">MetricsCB</h3>
+<blockquote class="blockquote">
+<pre><code> MetricsCB (*ms, **metrics)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#devicecb"><code>DeviceCB</code></a> puts the model and each batch onto the specified device.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L139" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="devicecb" class="level3">
+<h3 class="anchored" data-anchor-id="devicecb">DeviceCB</h3>
+<blockquote class="blockquote">
+<pre><code> DeviceCB (device='cpu')</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#traincb"><code>TrainCB</code></a> is the default implementation for <code>predict</code>, <code>get_loss</code>, <code>backward</code>, <code>step</code> and <code>zero_grad</code></p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L146" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="traincb" class="level3">
+<h3 class="anchored" data-anchor-id="traincb">TrainCB</h3>
+<blockquote class="blockquote">
+<pre><code> TrainCB (n_inp=1)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#progresscb"><code>ProgressCB</code></a> display the metrics recorded via <a href="https://fromLittleAcorns.github.io/miniai/learner.html#metricscb"><code>MetricsCB</code></a> as table and optionally as graph. Requires <a href="https://fromLittleAcorns.github.io/miniai/learner.html#metricscb"><code>MetricsCB</code></a>.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L155" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="progresscb" class="level3">
+<h3 class="anchored" data-anchor-id="progresscb">ProgressCB</h3>
+<blockquote class="blockquote">
+<pre><code> ProgressCB (plot=False)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p><code>with_cbs(nm)</code> is a decorator that first run <code>before_nm</code>, then the function it wraps and then <code>after_nm</code></p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L40" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="with_cbs" class="level3">
+<h3 class="anchored" data-anchor-id="with_cbs">with_cbs</h3>
+<blockquote class="blockquote">
+<pre><code> with_cbs (nm)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L53" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="learner" class="level3">
+<h3 class="anchored" data-anchor-id="learner">Learner</h3>
+<blockquote class="blockquote">
+<pre><code> Learner (model, dls=(0,), loss_func=&lt;function mse_loss&gt;, lr=0.1,
+          cbs=None, opt_func=&lt;class 'torch.optim.sgd.SGD'&gt;)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchvision.transforms.functional <span class="im">as</span> TF</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> nn,tensor</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>x,y <span class="op">=</span> <span class="st">'image'</span>,<span class="st">'label'</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"fashion_mnist"</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>dsd <span class="op">=</span> load_dataset(name)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="at">@inplace</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> transformi(b): b[x] <span class="op">=</span> [torch.flatten(TF.to_tensor(o)) <span class="cf">for</span> o <span class="kw">in</span> b[x]]     </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>bs <span class="op">=</span> <span class="dv">1024</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>tds <span class="op">=</span> dsd.with_transform(transformi)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>dls <span class="op">=</span> DataLoaders.from_dd(tds, bs, num_workers<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>m,nh <span class="op">=</span> <span class="dv">28</span><span class="op">*</span><span class="dv">28</span>,<span class="dv">50</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> nn.Sequential(nn.Linear(m,nh), nn.ReLU(), nn.Linear(nh,<span class="dv">10</span>))</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>learn <span class="op">=</span> Learner(model, dls, cbs<span class="op">=</span>[TrainCB(), DeviceCB(), MetricsCB(accuracy<span class="op">=</span>MulticlassAccuracy()), ProgressCB(plot<span class="op">=</span><span class="va">True</span>)], loss_func<span class="op">=</span>F.cross_entropy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Downloading builder script:   0%|          | 0.00/4.83k [00:00&lt;?, ?B/s]Downloading builder script: 100%|##########| 4.83k/4.83k [00:00&lt;00:00, 17.5MB/s]
+Downloading metadata:   0%|          | 0.00/3.13k [00:00&lt;?, ?B/s]Downloading metadata: 100%|##########| 3.13k/3.13k [00:00&lt;00:00, 14.7MB/s]
+Downloading readme:   0%|          | 0.00/8.85k [00:00&lt;?, ?B/s]Downloading readme: 100%|##########| 8.85k/8.85k [00:00&lt;00:00, 23.5MB/s]
+Downloading data files:   0%|          | 0/4 [00:00&lt;?, ?it/s]
+Downloading data:   0%|          | 0.00/26.4M [00:00&lt;?, ?B/s]
+Downloading data:  10%|#         | 2.73M/26.4M [00:00&lt;00:00, 27.3MB/s]
+Downloading data:  34%|###4      | 9.08M/26.4M [00:00&lt;00:00, 48.6MB/s]
+Downloading data:  59%|#####8    | 15.5M/26.4M [00:00&lt;00:00, 55.7MB/s]
+Downloading data:  83%|########2 | 21.9M/26.4M [00:00&lt;00:00, 59.1MB/s]Downloading data: 100%|##########| 26.4M/26.4M [00:00&lt;00:00, 56.8MB/s]
+Downloading data files:  25%|##5       | 1/4 [00:02&lt;00:07,  2.40s/it]
+Downloading data:   0%|          | 0.00/29.5k [00:00&lt;?, ?B/s]Downloading data: 100%|##########| 29.5k/29.5k [00:00&lt;00:00, 2.99MB/s]
+Downloading data files:  50%|#####     | 2/4 [00:03&lt;00:02,  1.41s/it]
+Downloading data:   0%|          | 0.00/4.42M [00:00&lt;?, ?B/s]
+Downloading data:  37%|###7      | 1.64M/4.42M [00:00&lt;00:00, 16.4MB/s]Downloading data: 100%|##########| 4.42M/4.42M [00:00&lt;00:00, 31.3MB/s]
+Downloading data files:  75%|#######5  | 3/4 [00:04&lt;00:01,  1.51s/it]
+Downloading data:   0%|          | 0.00/5.15k [00:00&lt;?, ?B/s]Downloading data: 100%|##########| 5.15k/5.15k [00:00&lt;00:00, 15.7MB/s]
+Downloading data files: 100%|##########| 4/4 [00:05&lt;00:00,  1.19s/it]Downloading data files: 100%|##########| 4/4 [00:05&lt;00:00,  1.36s/it]
+Extracting data files:   0%|          | 0/4 [00:00&lt;?, ?it/s]Extracting data files:  25%|##5       | 1/4 [00:00&lt;00:00,  3.17it/s]Extracting data files: 100%|##########| 4/4 [00:00&lt;00:00, 10.79it/s]
+Generating train split:   0%|          | 0/60000 [00:00&lt;?, ? examples/s]Generating train split:   0%|          | 1/60000 [00:00&lt;3:04:15,  5.43 examples/s]Generating train split:   1%|1         | 605/60000 [00:00&lt;00:22, 2637.95 examples/s]Generating train split:   2%|1         | 1174/60000 [00:00&lt;00:15, 3807.17 examples/s]Generating train split:   3%|2         | 1793/60000 [00:00&lt;00:12, 4648.75 examples/s]Generating train split:   4%|3         | 2382/60000 [00:00&lt;00:11, 5062.68 examples/s]Generating train split:   5%|5         | 3000/60000 [00:00&lt;00:10, 5357.95 examples/s]Generating train split:   6%|6         | 3619/60000 [00:00&lt;00:10, 5614.02 examples/s]Generating train split:   7%|7         | 4211/60000 [00:00&lt;00:09, 5703.58 examples/s]Generating train split:   8%|8         | 4828/60000 [00:00&lt;00:09, 5845.78 examples/s]Generating train split:  10%|9         | 5731/60000 [00:01&lt;00:09, 5912.84 examples/s]Generating train split:  11%|#1        | 6637/60000 [00:01&lt;00:08, 5956.33 examples/s]Generating train split:  13%|#2        | 7544/60000 [00:01&lt;00:08, 5984.45 examples/s]Generating train split:  14%|#4        | 8448/60000 [00:01&lt;00:08, 5995.56 examples/s]Generating train split:  16%|#5        | 9353/60000 [00:01&lt;00:08, 6004.58 examples/s]Generating train split:  17%|#6        | 9975/60000 [00:01&lt;00:08, 6053.00 examples/s]Generating train split:  18%|#8        | 10882/60000 [00:01&lt;00:08, 6047.45 examples/s]Generating train split:  20%|#9        | 11788/60000 [00:02&lt;00:07, 6040.38 examples/s]Generating train split:  21%|##1       | 12692/60000 [00:02&lt;00:07, 6033.67 examples/s]Generating train split:  22%|##2       | 13312/60000 [00:02&lt;00:07, 6014.95 examples/s]Generating train split:  23%|##3       | 13936/60000 [00:02&lt;00:07, 6067.89 examples/s]Generating train split:  25%|##4       | 14844/60000 [00:02&lt;00:07, 6058.94 examples/s]Generating train split:  26%|##6       | 15751/60000 [00:02&lt;00:07, 6052.31 examples/s]Generating train split:  28%|##7       | 16661/60000 [00:02&lt;00:07, 6054.29 examples/s]Generating train split:  29%|##9       | 17566/60000 [00:03&lt;00:07, 6044.50 examples/s]Generating train split:  31%|###       | 18467/60000 [00:03&lt;00:06, 6030.00 examples/s]Generating train split:  32%|###2      | 19368/60000 [00:03&lt;00:06, 6020.40 examples/s]Generating train split:  33%|###3      | 19990/60000 [00:03&lt;00:06, 6062.48 examples/s]Generating train split:  35%|###4      | 20886/60000 [00:03&lt;00:06, 6031.80 examples/s]Generating train split:  36%|###6      | 21778/60000 [00:03&lt;00:06, 6000.94 examples/s]Generating train split:  38%|###7      | 22686/60000 [00:03&lt;00:06, 6013.88 examples/s]Generating train split:  39%|###9      | 23595/60000 [00:04&lt;00:06, 6023.82 examples/s]Generating train split:  41%|####      | 24506/60000 [00:04&lt;00:05, 6035.31 examples/s]Generating train split:  42%|####2     | 25405/60000 [00:04&lt;00:05, 6021.88 examples/s]Generating train split:  44%|####3     | 26309/60000 [00:04&lt;00:05, 6019.06 examples/s]Generating train split:  45%|####4     | 26932/60000 [00:04&lt;00:05, 6065.76 examples/s]Generating train split:  46%|####6     | 27839/60000 [00:04&lt;00:05, 6057.32 examples/s]Generating train split:  48%|####7     | 28740/60000 [00:04&lt;00:05, 6038.13 examples/s]Generating train split:  49%|####9     | 29649/60000 [00:05&lt;00:05, 6040.42 examples/s]Generating train split:  51%|#####     | 30555/60000 [00:05&lt;00:04, 6038.37 examples/s]Generating train split:  52%|#####2    | 31461/60000 [00:05&lt;00:04, 6036.28 examples/s]Generating train split:  54%|#####3    | 32360/60000 [00:05&lt;00:04, 6022.65 examples/s]Generating train split:  55%|#####4    | 32982/60000 [00:05&lt;00:04, 6065.09 examples/s]Generating train split:  56%|#####6    | 33883/60000 [00:05&lt;00:04, 6042.15 examples/s]Generating train split:  58%|#####7    | 34784/60000 [00:05&lt;00:04, 6027.12 examples/s]Generating train split:  59%|#####9    | 35684/60000 [00:06&lt;00:04, 6016.15 examples/s]Generating train split:  61%|######    | 36588/60000 [00:06&lt;00:03, 6017.08 examples/s]Generating train split:  62%|######2   | 37493/60000 [00:06&lt;00:03, 6020.32 examples/s]Generating train split:  64%|######3   | 38398/60000 [00:06&lt;00:03, 6022.78 examples/s]Generating train split:  66%|######5   | 39311/60000 [00:06&lt;00:03, 6024.56 examples/s]Generating train split:  67%|######6   | 39932/60000 [00:06&lt;00:03, 6063.46 examples/s]Generating train split:  68%|######8   | 40841/60000 [00:06&lt;00:03, 6059.71 examples/s]Generating train split:  70%|######9   | 41744/60000 [00:07&lt;00:03, 6042.62 examples/s]Generating train split:  71%|#######1  | 42652/60000 [00:07&lt;00:02, 6041.98 examples/s]Generating train split:  73%|#######2  | 43555/60000 [00:07&lt;00:02, 6031.92 examples/s]Generating train split:  74%|#######4  | 44464/60000 [00:07&lt;00:02, 6037.69 examples/s]Generating train split:  76%|#######5  | 45364/60000 [00:07&lt;00:02, 6022.57 examples/s]Generating train split:  77%|#######6  | 45989/60000 [00:07&lt;00:02, 6071.31 examples/s]Generating train split:  78%|#######8  | 46895/60000 [00:07&lt;00:02, 6059.60 examples/s]Generating train split:  80%|#######9  | 47794/60000 [00:08&lt;00:02, 6036.77 examples/s]Generating train split:  81%|########1 | 48704/60000 [00:08&lt;00:01, 6042.21 examples/s]Generating train split:  82%|########2 | 49313/60000 [00:08&lt;00:01, 6025.98 examples/s]Generating train split:  83%|########3 | 49935/60000 [00:08&lt;00:01, 6071.85 examples/s]Generating train split:  85%|########4 | 50836/60000 [00:08&lt;00:01, 6045.17 examples/s]Generating train split:  86%|########6 | 51737/60000 [00:08&lt;00:01, 6031.97 examples/s]Generating train split:  88%|########7 | 52635/60000 [00:08&lt;00:01, 6013.61 examples/s]Generating train split:  89%|########9 | 53542/60000 [00:09&lt;00:01, 6020.33 examples/s]Generating train split:  91%|######### | 54443/60000 [00:09&lt;00:00, 6010.59 examples/s]Generating train split:  92%|#########2| 55349/60000 [00:09&lt;00:00, 6016.27 examples/s]Generating train split:  93%|#########3| 55969/60000 [00:09&lt;00:00, 6054.60 examples/s]Generating train split:  95%|#########4| 56872/60000 [00:09&lt;00:00, 6040.91 examples/s]Generating train split:  96%|#########6| 57774/60000 [00:09&lt;00:00, 6030.02 examples/s]Generating train split:  98%|#########7| 58676/60000 [00:09&lt;00:00, 6021.55 examples/s]Generating train split:  99%|#########9| 59574/60000 [00:10&lt;00:00, 6008.55 examples/s]Generating train split: 100%|##########| 60000/60000 [00:10&lt;00:00, 5920.43 examples/s]
+Generating test split:   0%|          | 0/10000 [00:00&lt;?, ? examples/s]Generating test split:   6%|5         | 575/10000 [00:00&lt;00:01, 5731.79 examples/s]Generating test split:  12%|#1        | 1167/10000 [00:00&lt;00:01, 5836.07 examples/s]Generating test split:  18%|#7        | 1789/10000 [00:00&lt;00:01, 6010.28 examples/s]Generating test split:  27%|##7       | 2700/10000 [00:00&lt;00:01, 6034.39 examples/s]Generating test split:  33%|###3      | 3310/10000 [00:00&lt;00:01, 5995.11 examples/s]Generating test split:  39%|###9      | 3933/10000 [00:00&lt;00:01, 6064.38 examples/s]Generating test split:  48%|####8     | 4831/10000 [00:00&lt;00:00, 6031.51 examples/s]Generating test split:  57%|#####7    | 5739/10000 [00:00&lt;00:00, 6035.59 examples/s]Generating test split:  66%|######6   | 6650/10000 [00:01&lt;00:00, 6042.65 examples/s]Generating test split:  76%|#######5  | 7550/10000 [00:01&lt;00:00, 6026.25 examples/s]Generating test split:  85%|########4 | 8458/10000 [00:01&lt;00:00, 6030.75 examples/s]Generating test split:  94%|#########3| 9361/10000 [00:01&lt;00:00, 6024.84 examples/s]Generating test split: 100%|#########9| 9986/10000 [00:01&lt;00:00, 6073.81 examples/s]Generating test split: 100%|##########| 10000/10000 [00:01&lt;00:00, 6010.16 examples/s]
+/opt/hostedtoolcache/Python/3.9.17/x64/lib/python3.9/site-packages/torch/utils/data/dataloader.py:560: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>learn.fit(n_epochs<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">accuracy</th>
+<th data-quarto-table-cell-role="th">loss</th>
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.590</td>
+<td>1.390</td>
+<td>0</td>
+<td>train</td>
+</tr>
+<tr class="even">
+<td>0.662</td>
+<td>0.928</td>
+<td>0</td>
+<td>eval</td>
+</tr>
+<tr class="odd">
+<td>0.710</td>
+<td>0.814</td>
+<td>1</td>
+<td>train</td>
+</tr>
+<tr class="even">
+<td>0.724</td>
+<td>0.748</td>
+<td>1</td>
+<td>eval</td>
+</tr>
+<tr class="odd">
+<td>0.751</td>
+<td>0.699</td>
+<td>2</td>
+<td>train</td>
+</tr>
+<tr class="even">
+<td>0.749</td>
+<td>0.710</td>
+<td>2</td>
+<td>eval</td>
+</tr>
+<tr class="odd">
+<td>0.777</td>
+<td>0.638</td>
+<td>3</td>
+<td>train</td>
+</tr>
+<tr class="even">
+<td>0.780</td>
+<td>0.621</td>
+<td>3</td>
+<td>eval</td>
+</tr>
+<tr class="odd">
+<td>0.791</td>
+<td>0.597</td>
+<td>4</td>
+<td>train</td>
+</tr>
+<tr class="even">
+<td>0.781</td>
+<td>0.608</td>
+<td>4</td>
+<td>eval</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="04_learner_files/figure-html/cell-15-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#trainlearner"><code>TrainLearner</code></a> is a <a href="https://fromLittleAcorns.github.io/miniai/learner.html#learner"><code>Learner</code></a> with <code>predict</code>, <code>get_loss</code>, <code>backward</code>, <code>step</code> and <code>zero_grad</code> already implemented. This is the same as a plain <a href="https://fromLittleAcorns.github.io/miniai/learner.html#learner"><code>Learner</code></a> with a <a href="https://fromLittleAcorns.github.io/miniai/learner.html#traincb"><code>TrainCB</code></a>.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L185" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="trainlearner" class="level3">
+<h3 class="anchored" data-anchor-id="trainlearner">TrainLearner</h3>
+<blockquote class="blockquote">
+<pre><code> TrainLearner (model, dls=(0,), loss_func=&lt;function mse_loss&gt;, lr=0.1,
+               cbs=None, opt_func=&lt;class 'torch.optim.sgd.SGD'&gt;)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p><a href="https://fromLittleAcorns.github.io/miniai/learner.html#momentumlearner"><code>MomentumLearner</code></a> is a <a href="https://fromLittleAcorns.github.io/miniai/learner.html#trainlearner"><code>TrainLearner</code></a> using <code>Momentum</code> instead of vanilla SGD.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L193" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="momentumlearner" class="level3">
+<h3 class="anchored" data-anchor-id="momentumlearner">MomentumLearner</h3>
+<blockquote class="blockquote">
+<pre><code> MomentumLearner (model, dls, loss_func, lr=None, cbs=None,
+                  opt_func=&lt;class 'torch.optim.sgd.SGD'&gt;, mom=0.85)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<hr>
+<p><a href="https://github.com/fromLittleAcorns/miniai/blob/main/miniai/learner.py#L206" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="lrfindercb" class="level3">
+<h3 class="anchored" data-anchor-id="lrfindercb">LRFinderCB</h3>
+<blockquote class="blockquote">
+<pre><code> LRFinderCB (gamma=1.3, max_mult=3)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<hr>
+<p><a href="https://github.com/fastai/nbdev/blob/master/nbdev/showdoc.py#LNone" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="show_doc" class="level3">
+<h3 class="anchored" data-anchor-id="show_doc">show_doc</h3>
+<blockquote class="blockquote">
+<pre><code> show_doc (sym, renderer=None, name:Optional[str]=None, title_level:int=3)</code></pre>
+</blockquote>
+<p>Show signature and docstring for <code>sym</code></p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>sym</td>
+<td></td>
+<td></td>
+<td>Symbol to document</td>
+</tr>
+<tr class="even">
+<td>renderer</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Optional renderer (defaults to markdown)</td>
+</tr>
+<tr class="odd">
+<td>name</td>
+<td>str | None</td>
+<td>None</td>
+<td>Optionally override displayed name of <code>sym</code></td>
+</tr>
+<tr class="even">
+<td>title_level</td>
+<td>int</td>
+<td>3</td>
+<td>Heading level to use for symbol name</td>
+</tr>
+</tbody>
+</table>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dls <span class="op">=</span> DataLoaders.from_dd(tds, bs, num_workers<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> nn.Sequential(nn.Linear(m,nh), nn.ReLU(), nn.Linear(nh,<span class="dv">10</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>learn <span class="op">=</span> TrainLearner(model, dls, loss_func<span class="op">=</span>F.cross_entropy)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>learn.lr_find()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)
+[W ParallelNative.cpp:230] Warning: Cannot set number of intraop threads after parallel work has started or after set_num_threads call when using native parallel backend (function set_num_threads)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="04_learner_files/figure-html/cell-20-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nbdev<span class="op">;</span> nbdev.nbdev_export()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
