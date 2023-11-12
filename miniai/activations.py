@@ -15,13 +15,14 @@ import torchvision.transforms.functional as TF
 from datasets import load_dataset
 
 from .datasets import *
-from .learner import *
 from .utils import set_seed, to_cpu
+from .plotting import get_grid, show_image
+from .callbacks import *
 
 # %% auto 0
 __all__ = ['Hook', 'append_stats', 'Hooks', 'HooksCallback', 'get_hist', 'get_min', 'ActivationStatsCB']
 
-# %% ../nbs/06_Activations.ipynb 28
+# %% ../nbs/06_Activations.ipynb 29
 class Hook():
     """ Class to initilize and when necessary remove hooks in a Pytorch module.  The supplied
     function will be called after every forward call to the layer, when it will be called 
@@ -46,7 +47,7 @@ class Hook():
         """
         self.remove()
 
-# %% ../nbs/06_Activations.ipynb 29
+# %% ../nbs/06_Activations.ipynb 30
 def append_stats(hook: Hook, mod: nn.Module, inp: torch.Tensor, outp: torch.Tensor):
     """ Record the activations of model layers using a hook.  For the supplied hook a new parameter
     'stats' is added, which will record the means and std deviation for each call of the hook.
@@ -66,7 +67,7 @@ def append_stats(hook: Hook, mod: nn.Module, inp: torch.Tensor, outp: torch.Tens
     hook.stats[0].append(acts.mean())
     hook.stats[1].append(acts.std())
 
-# %% ../nbs/06_Activations.ipynb 43
+# %% ../nbs/06_Activations.ipynb 45
 class Hooks(list):
     """ Class to act as a container and context manager for a set of hooks and to ensure that they are 
     all removed at the end.  
@@ -98,7 +99,7 @@ class Hooks(list):
     def remove(self): 
         for h in self: h.remove()
 
-# %% ../nbs/06_Activations.ipynb 48
+# %% ../nbs/06_Activations.ipynb 50
 class HooksCallback(Callback):
     def __init__(self, hookfunc, module_filter=fc.noop, on_train: bool=True, on_valid:bool=False, 
                 mods=None):
@@ -109,11 +110,15 @@ class HooksCallback(Callback):
             hookfunc: Function that will be called on the layers selected
             module_filter: A function to use to select the layers to use (defaults to fc.noop, which
               will select all.  Typically use a function such as fc.filter_ex to define specific
-              types of layers
+              types of layers.  When using this approach with large models many layers will end 
+              up with hooks attached and so it can be better to use the mods option below to select
+              a specific list of layers
             on_train: If true then the hool will be applied on training
             on_valid: if true that applies the hook during validation
             mods: If supplied then should be a list of layers to which the hooks will be applied.
-              When supplied then the module_filter is not used.  Defaults to None
+              When supplied then the module_filter is not used. The list can be indexed layers of 
+              the model or a list created using model.named_children where that works.
+              Defaults to None
             
         """
         fc.store_attr()
@@ -137,34 +142,56 @@ class HooksCallback(Callback):
     def __iter__(self): return iter(self.hooks)
     def __len__(self): return len(self.hooks)
 
-# %% ../nbs/06_Activations.ipynb 56
-def append_stats(hook, mod, inp, outp):
+# %% ../nbs/06_Activations.ipynb 71
+def append_stats(hook: Hook, mod: nn.Module, inp: torch.Tensor, outp: torch.Tensor):
+    """ Record the activations of model layers using a hook.  For the supplied hook a new parameter
+    'stats' is added, which will record the means and std deviation for each call of the hook.
+    Since this is called every time the layer is used the position in each list reflects the step
+    The hook property will contain three lists, one for the activation means at each call, one for
+    the standard deviation and one containing a histogram of the activations
+    
+    Args:
+        hook: the hook for which the activations are being recorded
+        mod: the module of the model to which the hook is assigned (unused)
+        inp: the input to the layer (unused)
+        outp:the output activations
+    
+    """
     if not hasattr(hook,'stats'): hook.stats = ([],[],[])
     acts = to_cpu(outp)
     hook.stats[0].append(acts.mean())
     hook.stats[1].append(acts.std())
-    hook.stats[2].append(acts.abs().histc(40,0,10))
+    hook.stats[2].append(acts.abs().histc(bins=40, min=0, max=10))
 
-# %% ../nbs/06_Activations.ipynb 58
+# %% ../nbs/06_Activations.ipynb 73
 # Thanks to @ste for initial version of histgram plotting code
-def get_hist(h): return torch.stack(h.stats[2]).t().float().log1p()
+def get_hist(h: Hook):
+    """ Take the data gathered by a the HooksCallback and prepare in a form suitable
+    for plotting.  Note that the log of the activation values is plotted
+    args:
+        h: the hook to be processed
+        
+    returns:
+        A new array of stacked histograms that can be plotted as a density image
+    """
+    return torch.stack(h.stats[2]).t().float().log1p()
 
-# %% ../nbs/06_Activations.ipynb 65
+# %% ../nbs/06_Activations.ipynb 80
 def get_min(h):
     """ Calculate the proportion of activations in the smallest bin
     """
     h_arr = torch.stack(h.stats[2]).t().float()
     return h_arr[0] / h_arr.sum(0)
 
-# %% ../nbs/06_Activations.ipynb 70
+# %% ../nbs/06_Activations.ipynb 85
 class ActivationStatsCB(HooksCallback):
-    """ Note that this builds upon the earlier work.  I have deviated from the course by passing in the 
-    hookfunc since I think this gived greater flexibility moving forwards, although so many things are 
-    now linked to the structure of the appstats function that it might be better to simply integrate that
-    into this class
+    """ Adds visulisation capability to the HookCallback.
+    Three types of chart can be produced by the class methods.
+
+    color_dim: 
     """
-    def __init__(self, hookfunc, module_filter=fc.noop):
-        super().__init__(hookfunc, module_filter)
+    def __init__(self, module_filter=fc.noop):
+        super().__init__(append_stats, module_filter)
         
     def color_dim(self, figsize=(11,5)):
         fig,axes = get_grid(len(self), figsize=figsize)

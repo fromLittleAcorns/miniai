@@ -12,11 +12,13 @@ from pathlib import Path
 from torch import tensor
 from torch import nn
 import fastcore.test as fct
+import fastcore.all as fc
 
 from torch.utils.data import DataLoader,default_collate
 from typing import Mapping
 
 from .datasets import *
+from .layers import GeneralRelu
 
 # %% ../nbs/05_model_blocks.ipynb 4
 # Temp - to be removed once activations module in place

@@ -21,7 +21,7 @@ the content is developed
 ## Install
 
 Note that this is not setup on pip as yet. To install clone the libary
-and do a pip install -e .
+and do a pip install -e ‘.\[dev\]’
 
 ## How to use
 
