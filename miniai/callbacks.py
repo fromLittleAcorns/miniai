@@ -10,7 +10,7 @@ from torcheval.metrics import MulticlassAccuracy,Mean
 from copy import copy
 from fastprogress import progress_bar,master_bar
 
-from .utils import def_device, to_device
+from .utils import def_device, to_device, to_cpu
 
 # %% ../nbs/12_callbacks.ipynb 2
 class CancelFitException(Exception): pass
