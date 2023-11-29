@@ -2,13 +2,16 @@
 
 # %% auto 0
 __all__ = ['CancelFitException', 'CancelBatchException', 'CancelEpochException', 'Callback', 'SingleBatchCB', 'MetricsCB',
-           'DeviceCB', 'TrainCB', 'ProgressCB']
+           'DeviceCB', 'TrainCB', 'ProgressCB', 'BaseSchedCB', 'BatchSchedCB', 'OneCycleLrCB', 'EpochSchedCB',
+           'HasLearnCB', 'RecorderCB']
 
 # %% ../nbs/12_callbacks.ipynb 1
 import fastcore.all as fc
+from torch.optim import lr_scheduler
 from torcheval.metrics import MulticlassAccuracy,Mean
 from copy import copy
 from fastprogress import progress_bar,master_bar
+import matplotlib.pyplot as plt
 
 from .utils import def_device, to_device, to_cpu
 
@@ -93,3 +96,101 @@ class ProgressCB(Callback):
             if self.plot and hasattr(learn, 'metrics'): 
                 self.val_losses.append(learn.metrics.all_metrics['loss'].compute())
                 self.mbar.update_graph([[fc.L.range(self.losses), self.losses],[fc.L.range(learn.epoch+1).map(lambda x: (x+1)*len(learn.dls.train)), self.val_losses]])
+
+# %% ../nbs/12_callbacks.ipynb 11
+class BaseSchedCB(Callback):
+    """ Base scheduling class that will trigger events.  Initialised with a Pytorch type scheduler
+    The scheduler is assigned to the learner optimiser before fit and the scheduler step method
+    implemented whenever the optimiser is stepped by the learner
+    """
+    def __init__(self, sched, **kwargs): 
+        self.sched = sched
+        self.kwargs=kwargs
+        
+    def before_fit(self, learn): self.schedo = self.sched(learn.opt)
+    def _step(self, learn):
+        if learn.training: self.schedo.step()
+
+# %% ../nbs/12_callbacks.ipynb 12
+class BatchSchedCB(BaseSchedCB):
+    """ Inherits from the BaseSchedCD class and adds an additional scheduler step after each batch
+    """
+    def after_batch(self, learn): self._step(learn)
+
+# %% ../nbs/12_callbacks.ipynb 13
+class OneCycleLrCB(BatchSchedCB):
+    """ Inherits from the BatchSchedCD class and works out the scheduler to cover the period of 
+    the fit (ie the number of epoch and batches in a specific fit
+    """
+    
+    def __init__(self, max_lr: float = 0.01, **kwargs):
+        """ Define the parameters for the one cyc
+        """
+        self.max_lr = max_lr
+        self.kwargs = kwargs
+    
+    def before_fit(self, learn):
+        # Assign scheduler
+        num_batches = len(learn.dls.train)
+        total_steps = num_batches * learn.n_epochs
+        self.schedo = lr_scheduler.OneCycleLR(learn.opt, total_steps=total_steps,
+                         max_lr=self.max_lr, **self.kwargs)
+        
+    def after_batch(self, learn): self._step(learn)
+
+# %% ../nbs/12_callbacks.ipynb 14
+class EpochSchedCB(BaseSchedCB):
+    """ Inherits from the BaseSchedCD class and adds an additional scheduler step after each epoch.
+    Provides a more granular change in the optimiser parameters than the batch scheduler for where
+    that would be valuable
+    """
+    def after_epoch(self, learn): self._step(learn)
+
+# %% ../nbs/12_callbacks.ipynb 15
+class HasLearnCB(Callback):
+    def before_fit(self, learn): self.learn = learn 
+    def after_fit(self, learn): self.learn = None
+
+# %% ../nbs/12_callbacks.ipynb 17
+class RecorderCB(Callback):
+    """ Class to record specific items during training.  Examples
+    of possible cases would be:
+    
+    RecorderCB(lr=lr_) where lr_ is a callable that will return from the 
+    learner the value to be saved as lr
+    
+    In the above case lr_ could be as follows:
+    
+        def lr_(cb): cb.pg['lr']
+        
+    would then return the parameter group value for 'lr'.  The same could be done for 
+    momentum...
+    
+    This reliess upon the way in which the learner is setup as self for callbacks
+    
+    """
+    def __init__(self, **d): 
+        """ Define parameters to track
+        """
+        self.d = d
+        
+    def before_fit(self, learn):
+        # Create empty lists for each keyword
+        self.recs = {k:[] for k in self.d}
+        # Define the parameter group as the first one (it there are multiple the others
+        # will be ignored at present)
+        self.pg = learn.opt.param_groups[0]
+    
+    def after_batch(self, learn):
+        """ Append values to be recorded afer each batch using the callable assiciated 
+        with each keyword
+        """
+        if not learn.training: return
+        for k,v in self.d.items():
+            self.recs[k].append(v(self))
+
+    def plot(self):
+        for k,v in self.recs.items():
+            plt.plot(v, label=k)
+            plt.legend()
+            plt.show()
