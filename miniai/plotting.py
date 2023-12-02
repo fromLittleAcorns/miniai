@@ -105,13 +105,12 @@ def get_grid(
     # Avoid passing cmap to subplots
     _ = kwargs.pop('cmap', None)
     # Avoid passing suptitle to subplots
-    if 'suptitle' in kwargs.keys():
-        suptitle = kwargs.pop('suptitle', None)
+    suptitle = kwargs.pop('suptitle', None) if 'suptitle' in kwargs.keys() else None
     fig, axs = subplots(nrows, ncols, **kwargs)
     # Turn of the display of axis where there are no images (ie where there are unused positions on the grid)
     for i in range(n, nrows*ncols): axs.flat[i].set_axis_off()
     # Add the overall plot title if necessary
-    if suptitle:
+    if suptitle is not None:
         fig.suptitle(suptitle, weight=weight, size=size)
     return fig, axs
 
