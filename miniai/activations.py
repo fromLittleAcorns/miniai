@@ -69,7 +69,7 @@ def append_stats(hook: Hook, mod: nn.Module, inp: torch.Tensor, outp: torch.Tens
     hook.stats[0].append(acts.mean())
     hook.stats[1].append(acts.std())
 
-# %% ../nbs/06_Activations.ipynb 45
+# %% ../nbs/06_Activations.ipynb 44
 class Hooks(list):
     """ Class to act as a container and context manager for a set of hooks and to ensure that they are 
     all removed at the end.  
@@ -101,7 +101,7 @@ class Hooks(list):
     def remove(self): 
         for h in self: h.remove()
 
-# %% ../nbs/06_Activations.ipynb 50
+# %% ../nbs/06_Activations.ipynb 49
 class HooksCallback(Callback):
     def __init__(self, hookfunc, module_filter=fc.noop, on_train: bool=True, on_valid:bool=False, 
                 mods=None):
@@ -144,7 +144,7 @@ class HooksCallback(Callback):
     def __iter__(self): return iter(self.hooks)
     def __len__(self): return len(self.hooks)
 
-# %% ../nbs/06_Activations.ipynb 71
+# %% ../nbs/06_Activations.ipynb 70
 def append_stats(hook: Hook, mod: nn.Module, inp: torch.Tensor, outp: torch.Tensor):
     """ Record the activations of model layers using a hook.  For the supplied hook a new parameter
     'stats' is added, which will record the means and std deviation for each call of the hook.
@@ -165,7 +165,7 @@ def append_stats(hook: Hook, mod: nn.Module, inp: torch.Tensor, outp: torch.Tens
     hook.stats[1].append(acts.std())
     hook.stats[2].append(acts.abs().histc(bins=40, min=0, max=10))
 
-# %% ../nbs/06_Activations.ipynb 73
+# %% ../nbs/06_Activations.ipynb 72
 # Thanks to @ste for initial version of histgram plotting code
 def get_hist(h: Hook):
     """ Take the data gathered by a the HooksCallback and prepare in a form suitable
@@ -178,14 +178,14 @@ def get_hist(h: Hook):
     """
     return torch.stack(h.stats[2]).t().float().log1p()
 
-# %% ../nbs/06_Activations.ipynb 80
+# %% ../nbs/06_Activations.ipynb 79
 def get_min(h):
     """ Calculate the proportion of activations in the smallest bin
     """
     h_arr = torch.stack(h.stats[2]).t().float()
     return h_arr[0] / h_arr.sum(0)
 
-# %% ../nbs/06_Activations.ipynb 85
+# %% ../nbs/06_Activations.ipynb 84
 class ActivationStatsCB(HooksCallback):
     """ Adds visulisation capability to the HookCallback.
     Three types of chart can be produced by the class methods.
