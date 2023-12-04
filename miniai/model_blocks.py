@@ -37,7 +37,7 @@ class GeneralRelu(nn.Module):
 # Temp - to be removed once activations module in place
 act_gr = partial(GeneralRelu, leak=0.1, sub=0.4)
 
-# %% ../nbs/05_model_blocks.ipynb 8
+# %% ../nbs/05_model_blocks.ipynb 7
 def conv(ni, # Input filters
          nf, # Output filters
          ks=3, # Kernel size
@@ -65,7 +65,7 @@ def conv(ni, # Input filters
     if act: layers.append(act())
     return nn.Sequential(*layers)
 
-# %% ../nbs/05_model_blocks.ipynb 26
+# %% ../nbs/05_model_blocks.ipynb 25
 def _conv_block(ni, # input channels
                 nf, # out channels
                 stride, # stride
@@ -83,7 +83,7 @@ def _conv_block(ni, # input channels
         conv(nf, nf, stride=stride, ks=ks, act=None, norm=norm)
     )
 
-# %% ../nbs/05_model_blocks.ipynb 27
+# %% ../nbs/05_model_blocks.ipynb 26
 class ResBlock(nn.Module):
     """ Create a traditional Resnet block with a conv block, a pass through path, a pooling layer and
     an activation.
@@ -116,7 +116,7 @@ class ResBlock(nn.Module):
     def forward(self, x):
         return self.act(self.convs(x) + self.idconv(self.pool(x)))
 
-# %% ../nbs/05_model_blocks.ipynb 29
+# %% ../nbs/05_model_blocks.ipynb 28
 def pre_conv(ni, # input channels
              nf, # out channels
              ks=3, # kernel size
@@ -137,7 +137,7 @@ def pre_conv(ni, # input channels
     layers.append(nn.Conv2d(ni, nf, stride=stride, kernel_size=ks, padding=ks//2, bias=bias))
     return layers
 
-# %% ../nbs/05_model_blocks.ipynb 35
+# %% ../nbs/05_model_blocks.ipynb 34
 def lin(ni, #input channels
         nf, #output channels"
         act=nn.SiLU, # activation to use or None
@@ -152,7 +152,7 @@ def lin(ni, #input channels
     layers.append(nn.Linear(ni, nf, bias=bias))
     return layers
 
-# %% ../nbs/05_model_blocks.ipynb 37
+# %% ../nbs/05_model_blocks.ipynb 36
 class SelfAttention(nn.Module):
     def __init__(self, ni, attn_chans, transpose=True):
         super().__init__()
@@ -177,13 +177,13 @@ class SelfAttention(nn.Module):
         if self.t: x = x.transpose(1, 2)
         return x
 
-# %% ../nbs/05_model_blocks.ipynb 40
+# %% ../nbs/05_model_blocks.ipynb 39
 class SelfAttention2D(SelfAttention):
     def forward(self, x):
         n,c,h,w = x.shape
         return super().forward(x.view(n, c, -1)).reshape(n,c,h,w)
 
-# %% ../nbs/05_model_blocks.ipynb 42
+# %% ../nbs/05_model_blocks.ipynb 41
 class EmbResBlock(nn.Module):
     def __init__(self, n_emb, ni, nf=None, ks=3, act=nn.SiLU, norm=nn.BatchNorm2d, attn_chans=0):
         super().__init__()
@@ -206,7 +206,7 @@ class EmbResBlock(nn.Module):
         if self.attn: x = x + self.attn(x)
         return x
 
-# %% ../nbs/05_model_blocks.ipynb 44
+# %% ../nbs/05_model_blocks.ipynb 43
 def saved(m, # torch.nn.module, the module for which the output will be saved
           blk # The block containing the module
          ):
@@ -227,7 +227,7 @@ def saved(m, # torch.nn.module, the module for which the output will be saved
     m.forward = _f
     return m
 
-# %% ../nbs/05_model_blocks.ipynb 53
+# %% ../nbs/05_model_blocks.ipynb 52
 class DownBlock(nn.Module):
     """ A down block is a part of a stable diffusion Unet.  It contains an EmbResBlock which is followed 
     by an optional down block (if no down block then an identity is used).  Activations of teh EmbResBlock
@@ -245,7 +245,7 @@ class DownBlock(nn.Module):
         x = self.down(x)
         return x
 
-# %% ../nbs/05_model_blocks.ipynb 54
+# %% ../nbs/05_model_blocks.ipynb 53
 class UpBlock(nn.Module):
     def __init__(self, n_emb, ni, prev_nf, nf, add_up=True, num_layers=2, attn_chans=0):
         super().__init__()
@@ -258,7 +258,7 @@ class UpBlock(nn.Module):
         for resnet in self.resnets: x = resnet(torch.cat([x, ups.pop()], dim=1), t)
         return self.up(x)
 
-# %% ../nbs/05_model_blocks.ipynb 55
+# %% ../nbs/05_model_blocks.ipynb 54
 class EmbUNetModel(nn.Module):
     def __init__( self, in_channels=3, out_channels=3, nfs=(224,448,672,896), num_layers=1, attn_chans=8, attn_start=1):
         super().__init__()
